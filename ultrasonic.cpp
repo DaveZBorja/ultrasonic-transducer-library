@@ -1,3 +1,11 @@
+/*
+ * ultrasonic.h - Interface for Ultrasonic Ranging Module HC-SR04
+ * 
+ * Author: Dave Borja <dave.borja@cbsua.edu.ph>
+ * Created: February 18, 2021
+ * License: GNU GPL v2 or later
+ */
+
 #include "ultrasonic.h"
 
 Ultrasonic::Ultrasonic(int trigPin, int echoPin) {
