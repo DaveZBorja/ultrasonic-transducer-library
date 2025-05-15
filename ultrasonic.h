@@ -1,46 +1,34 @@
 /*
- * ultrasonic.h - Code use by Ultrasonic Ranging Module HC - Sr04
+ * ultrasonic.h - Interface for Ultrasonic Ranging Module HC-SR04
  * 
- * Copyright 2019 <dave.borja@cbsua.edu.ph>
- * Created date: February-18-2021
- * 
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
- * MA 02110-1301, USA.
- * 
- * 
+ * Author: Dave Borja <dave.borja@cbsua.edu.ph>
+ * Created: February 18, 2021
+ * License: GNU GPL v2 or later
  */
-#ifndef ultra
-#define ultra
+
+#ifndef ULTRASONIC_H
+#define ULTRASONIC_H
 
 #if (ARDUINO >= 100)
     #include "Arduino.h"
-#else 
+#else
     #include "WProgram.h"
-#endif 
+#endif
 
+class Ultrasonic {
+public:
+    Ultrasonic(int trig, int echo);
+    int distance_cm();  // Measure distance in centimeters
+    int distance_in();  // Measure distance in inches
 
-class Ultrasonic
-{
-    public:
-        Ultrasonic(int trig, int echo);
-        int distance_cm();
-        int distance_in();
-        
-    private:
-        int _trig;
-        int _echo;
+private:
+    int _trig;
+    int _echo;
+
+    // For direct port manipulation (speed optimization)
+    volatile uint8_t* _trig_out;
+    uint8_t _trig_bit_mask;
+    uint8_t _trig_port;
 };
 
-#endif
+#endif  // ULTRASONIC_H
