@@ -1,52 +1,32 @@
 /*
- * ultrasonic_Cm.ino - Sample Code use by Ultrasonic Ranging Module HC - Sr04
+ * ultrasonic_Cm.ino - Sample code for Ultrasonic Ranging Module HC-SR04
  * 
- * Copyright 2019 <dave.borja@cbsua.edu.ph>
- * Created date: February-18-2021
- * 
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
- * MA 02110-1301, USA.
- * 
- * 
+ * Author: Dave Borja <dave.borja@cbsua.edu.ph>
+ * Created: February 18, 2021
+ * License: GNU GPL v2 or later
  */
 
-#include <ultrasonic.h> //Ultrasonic Tranducer HC - SR04 library
+#include <ultrasonic.h>  // Ultrasonic Transducer HC-SR04 library
 
-Ultrasonic Ultrasonic(9, 10); // create Ultrasonic object first @param trigger second @param echo
+// Create Ultrasonic object with trigger pin 9 and echo pin 10
+Ultrasonic ultrasonicSensor(9, 10);
 
-int distanceCm; // variable for distance in Centimeter
-int distanceIn; // variable for distance in Inches
-
-void setup(){
-	Serial.begin(9600); // for Serial communication with a boudrate (9600) 
+void setup() {
+    Serial.begin(9600);  // Initialize serial communication at 9600 baud rate
 }
-void loop(){
-	distanceCm = Ultrasonic.distance_cm(); // function in measuring distances in cm
-	Serial.print("Distance in Cm: ");
-	Serial.println(distanceCm);
-	
+
+void loop() {
+    int distanceCm = ultrasonicSensor.distance_cm();  // Measure distance in cm
+    
+    Serial.print("Distance in cm: ");
+    Serial.println(distanceCm);
+
+    delay(500);  // Delay for readability in serial output
 }
 
 /*
-* PS: no more hard-coded 
-*
-* Exmple:
-*       
-*		// To measure the distance in Inches
-*		
-*		distanceIn = Ultrasonic.distance_in(); // function in measuring distances in in
-*		Serial.println(distanceIn);
-*/
-	
+ * To measure distance in inches, you can use:
+ * 
+ * int distanceIn = ultrasonicSensor.distance_in();
+ * Serial.println(distanceIn);
+ */
