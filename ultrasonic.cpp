@@ -1,63 +1,43 @@
-/*
- * ultrasonic.cpp - Code use by Ultrasonic Ranging Module HC - Sr04
- * 
- * Copyright 2019 <dave.borja@cbsua.edu.ph>
- * Created date: February-18-2021
- * 
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
- * MA 02110-1301, USA.
- * 
- * 
- */
-
 #include "ultrasonic.h"
 
-Ultrasonic::Ultrasonic(int trig, int echo){
-   
-    pinMode(echo, INPUT);
-    _echo = echo;
-    pinMode(trig, OUTPUT);
-    _trig = trig;
+Ultrasonic::Ultrasonic(int trigPin, int echoPin) {
+    _trig = trigPin;
+    _echo = echoPin;
 
+    pinMode(_trig, OUTPUT);
+    pinMode(_echo, INPUT);
+
+    // Cache register and bit mask for fast digitalWrite replacement
+    _trig_port = digitalPinToPort(_trig);
+    _trig_bit_mask = digitalPinToBitMask(_trig);
+    _trig_out = portOutputRegister(_trig_port);
 }
 
-int Ultrasonic::distance_cm(){
-    digitalWrite(_trig, LOW);
+int Ultrasonic::distance_cm() {
+    // LOW pulse
+    *_trig_out &= ~_trig_bit_mask;
     delayMicroseconds(2);
 
-    digitalWrite(_trig, HIGH);
+    // HIGH pulse
+    *_trig_out |= _trig_bit_mask;
     delayMicroseconds(10);
-    digitalWrite(_trig, LOW);
+
+    // LOW pulse again
+    *_trig_out &= ~_trig_bit_mask;
 
     long duration = pulseIn(_echo, HIGH);
-    int distance_cm = duration * 0.034 / 2;
-
-    return distance_cm;
+    return duration * 0.034 / 2;
 }
-int Ultrasonic::distance_in(){
-    digitalWrite(_trig, LOW);
+
+int Ultrasonic::distance_in() {
+    *_trig_out &= ~_trig_bit_mask;
     delayMicroseconds(2);
 
-    digitalWrite(_trig, HIGH);
+    *_trig_out |= _trig_bit_mask;
     delayMicroseconds(10);
-    digitalWrite(_trig, LOW);
+
+    *_trig_out &= ~_trig_bit_mask;
 
     long duration = pulseIn(_echo, HIGH);
-    int distance_in = duration*0.0113/2;
-
-    return distance_in;
-
-  
+    return duration * 0.0113 / 2;
 }
