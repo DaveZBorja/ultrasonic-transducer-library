@@ -1,26 +1,25 @@
 /*
-  ultrasonic_In.ino - Sample Code use by Ultrasonic Ranging Module HC - Sr04
-  Created by Dave Z. Borja, February-18-2021 
+ * ultrasonic_In.ino - Sample code for Ultrasonic Ranging Module HC-SR04
+ * 
+ * Author: Dave Borja <dave.borja@cbsua.edu.ph>
+ * Created: February 18, 2021
+ * License: GNU GPL v2 or later
+ */
 
-*/
+#include <ultrasonic.h>  // Ultrasonic Transducer HC-SR04 library
 
-#include <ultrasonic.h> //Ultrasonic Tranducer library
+// Create Ultrasonic object with trigger pin 9 and echo pin 10
+Ultrasonic ultrasonicSensor(9, 10);
 
-Ultrasonic Ultrasonic(9, 10); // create object first @param trigger second @param echo
-
-int distanceCm; // variable for distance in Centimeter
-int distanceIn; // variable for distance in Inches
-
-void setup(){
-	Serial.begin(9600); // for Serial communication and boudrate (9600) 
+void setup() {
+    Serial.begin(9600);  // Initialize serial communication at 9600 baud
 }
-void loop(){
 
-	//distanceCm = Ultrasonic.distance_cm(); // function in measuring distances in cm
-	//Serial.println(distanceCm); 
+void loop() {
+    int distanceIn = ultrasonicSensor.distance_in();  // Measure distance in inches
 
-	distanceIn = Ultrasonic.distance_in(); // function in measuring distances in in
-	Serial.print("Distance in Inches: ");
-	Serial.println(distanceIn);
-	
+    Serial.print("Distance in Inches: ");
+    Serial.println(distanceIn);
+
+    delay(500);  // Small delay for easier reading in serial monitor
 }
